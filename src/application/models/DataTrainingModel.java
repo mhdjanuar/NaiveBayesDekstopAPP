@@ -11,10 +11,13 @@ package application.models;
 public class DataTrainingModel {
     private int id;
     private String nama;
-    private String kedisiplinan;
-    private String penjualan;
-    private String kepuasan;
+    private String kriteria1;
+    private String kriteria2;
+    private String kriteria3;
+    private String kriteria4;
+    private String kriteria5;
     private String label;
+    private int ladyYakultId;
     
     /**
      * @return the id
@@ -45,48 +48,6 @@ public class DataTrainingModel {
     }
 
     /**
-     * @return the kedisiplinan
-     */
-    public String getKedisiplinan() {
-        return kedisiplinan;
-    }
-
-    /**
-     * @param kedisiplinan the kedisiplinan to set
-     */
-    public void setKedisiplinan(String kedisiplinan) {
-        this.kedisiplinan = kedisiplinan;
-    }
-
-    /**
-     * @return the penjualan
-     */
-    public String getPenjualan() {
-        return penjualan;
-    }
-
-    /**
-     * @param penjualan the penjualan to set
-     */
-    public void setPenjualan(String penjualan) {
-        this.penjualan = penjualan;
-    }
-
-    /**
-     * @return the kepuasan
-     */
-    public String getKepuasan() {
-        return kepuasan;
-    }
-
-    /**
-     * @param kepuasan the kepuasan to set
-     */
-    public void setKepuasan(String kepuasan) {
-        this.kepuasan = kepuasan;
-    }
-
-    /**
      * @return the label
      */
     public String getLabel() {
@@ -98,5 +59,89 @@ public class DataTrainingModel {
      */
     public void setLabel(String label) {
         this.label = label;
+    }
+    
+        /**
+     * @return the kriteria1
+     */
+    public String getKriteria1() {
+        return kriteria1;
+    }
+
+    /**
+     * @param kriteria1 the kriteria1 to set
+     */
+    public void setKriteria1(String kriteria1) {
+        this.kriteria1 = kriteria1;
+    }
+
+    /**
+     * @return the kriteria2
+     */
+    public String getKriteria2() {
+        return kriteria2;
+    }
+
+    /**
+     * @param kriteria2 the kriteria2 to set
+     */
+    public void setKriteria2(String kriteria2) {
+        this.kriteria2 = kriteria2;
+    }
+
+    /**
+     * @return the kriteria3
+     */
+    public String getKriteria3() {
+        return kriteria3;
+    }
+
+    /**
+     * @param kriteria3 the kriteria3 to set
+     */
+    public void setKriteria3(String kriteria3) {
+        this.kriteria3 = kriteria3;
+    }
+    
+    /**
+     * @return the kriteria4
+     */
+    public String getKriteria4() {
+        return kriteria4;
+    }
+
+    /**
+     * @param kriteria4 the kriteria4 to set
+     */
+    public void setKriteria4(String kriteria4) {
+        this.kriteria4 = kriteria4;
+    }
+
+    /**
+     * @return the kriteria5
+     */
+    public String getKriteria5() {
+        return kriteria5;
+    }
+
+    /**
+     * @param kriteria5 the kriteria5 to set
+     */
+    public void setKriteria5(String kriteria5) {
+        this.kriteria5 = kriteria5;
+    }
+    
+     /**
+     * @return the ladyYakultId
+     */
+    public int getLadyYakultId() {
+        return ladyYakultId;
+    }
+
+    /**
+     * @param ladyYakultId the ladyYakultId to set
+     */
+    public void setLadyYakultId(int ladyYakultId) {
+        this.ladyYakultId = ladyYakultId;
     }
 }

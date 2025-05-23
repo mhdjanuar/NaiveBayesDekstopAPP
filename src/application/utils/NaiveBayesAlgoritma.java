@@ -4,6 +4,7 @@
  */
 package application.utils;
 
+import application.models.PredictionResultModel;
 import java.util.*;
 
 /**
@@ -61,7 +62,7 @@ public class NaiveBayesAlgoritma {
         return bestLabel;
     }
     
-    public String predictWithExplanation(Map<String, String> features) {
+    public PredictionResultModel predictWithExplanation(Map<String, String> features) {
         double maxProb = -1;
         String bestLabel = null;
 
@@ -98,9 +99,8 @@ public class NaiveBayesAlgoritma {
         sb.append("\n>> Prediksi terbaik: ").append(bestLabel)
           .append(" (Probabilitas: ").append(maxProb).append(")");
 
-        return sb.toString();
+        return new PredictionResultModel(bestLabel, sb.toString());
     }
-
     
     private double getPrior(String label) {
         return (double) labelCount.get(label) / trainingData.size();

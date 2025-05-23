@@ -8,7 +8,9 @@ import application.dao.DataTraining;
 import application.dao.KaryawanDao;
 import application.daoimpl.DataTrainingDaoImpl;
 import application.daoimpl.KaryawanDaoImpl;
+import application.models.DataTrainingModel;
 import application.models.KaryawanModel;
+import application.models.PredictionResultModel;
 import application.utils.DataItem;
 import application.utils.NaiveBayesAlgoritma;
 import java.awt.BorderLayout;
@@ -16,8 +18,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -29,37 +34,37 @@ import javax.swing.JTextArea;
 public class PrediksiView extends javax.swing.JPanel {
     public final DataTraining dataTrainingDao;
     public final KaryawanDao karyawanDao;
+    public Map<String, Integer> karyawanMap = new HashMap<>();
     
     public void featureDropdown() {
-        List<String> kedisiplinan = Arrays.asList("Tinggi", "Sedang", "Rendah");
-        jComboBoxKedisiplinan.removeAllItems(); // hapus isi sebelumnya
+        // Definisikan data fitur dan isinya
+        Map<JComboBox<String>, List<String>> featureMap = new LinkedHashMap<>();
+        featureMap.put(jComboBoxPenjualan, Arrays.asList("Tinggi", "Sedang", "Rendah")); // volume penjualan
+        featureMap.put(jComboBoxAbsen, Arrays.asList("Jarang", "Sedang", "Sering"));     // frekuensi absen
+        featureMap.put(jComboBoxPelayanan, Arrays.asList("Sangat Baik", "Baik", "Buruk")); // kualitas pelayanan pelanggan
+        featureMap.put(jComboBoxKedisiplinan, Arrays.asList("Tepat Waktu", "Kadang Telat", "Sering Telat")); // disiplin kerja
+        featureMap.put(jComboBoxLamaKerja, Arrays.asList("Baru", "Menengah", "Lama"));    // lama pengalaman kerja
 
-        for (String item : kedisiplinan) {
-            jComboBoxKedisiplinan.addItem(item);
+        // Iterasi dan isi combo box secara dinamis
+        for (Map.Entry<JComboBox<String>, List<String>> entry : featureMap.entrySet()) {
+            JComboBox<String> comboBox = entry.getKey();
+            List<String> values = entry.getValue();
+
+            comboBox.removeAllItems();
+            for (String value : values) {
+                comboBox.addItem(value);
+            }
         }
-        
-        List<String> penjualan = Arrays.asList("Tinggi", "Sedang", "Rendah");
-        jComboBoxPenjualan.removeAllItems(); // hapus isi sebelumnya
 
-        for (String item : penjualan) {
-            jComboBoxPenjualan.addItem(item);
-        }
-        
-        List<String> kepuasan = Arrays.asList("Baik", "Buruk");
-        jComboBoxKepuasan.removeAllItems(); // hapus isi sebelumnya
-
-        for (String item : kepuasan) {
-            jComboBoxKepuasan.addItem(item);
-        }
-        
-        // Tambahkan karyawan ke jComboBoxKaryawan
-        jComboBoxKaryawan.removeAllItems(); // kosongkan dulu
-        List<KaryawanModel> listKaryawan = karyawanDao.findAll(); // ambil data dari DAO
-
+        // Tambahkan data karyawan
+        jComboBoxKaryawan.removeAllItems();
+        List<KaryawanModel> listKaryawan = karyawanDao.findAll();
         for (KaryawanModel karyawan : listKaryawan) {
-            jComboBoxKaryawan.addItem(karyawan.getName()); // asumsi ada getNama()
+            jComboBoxKaryawan.addItem(karyawan.getName()); // Menampilkan nama karyawan
+            karyawanMap.put(karyawan.getName(), karyawan.getId()); // Menyimpan ID berdasarkan nama
         }
     }
+
 
     /**
      * Creates new form PrediksiView
@@ -88,19 +93,23 @@ public class PrediksiView extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jComboBoxKedisiplinan = new javax.swing.JComboBox<>();
         jComboBoxPenjualan = new javax.swing.JComboBox<>();
-        jComboBoxKepuasan = new javax.swing.JComboBox<>();
+        jComboBoxAbsen = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jComboBoxKaryawan = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        jComboBoxPelayanan = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        jComboBoxLamaKerja = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setText("Kedisiplinan");
+        jLabel1.setText("Penjualan");
 
-        jLabel2.setText("Penjualan");
+        jLabel2.setText("Absen");
 
-        jLabel3.setText("Kepuasan");
+        jLabel3.setText("Pelayanan");
 
         jButton1.setText("HASIL");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -113,7 +122,12 @@ public class PrediksiView extends javax.swing.JPanel {
 
         jComboBoxPenjualan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jComboBoxKepuasan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxAbsen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxAbsen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxAbsenActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("PREDIKSI");
@@ -122,6 +136,19 @@ public class PrediksiView extends javax.swing.JPanel {
 
         jComboBoxKaryawan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        jLabel6.setText("Kedisiplinan");
+
+        jComboBoxPelayanan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxPelayanan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxPelayananActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Lama Kerja");
+
+        jComboBoxLamaKerja.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -129,25 +156,36 @@ public class PrediksiView extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBoxKedisiplinan, 0, 257, Short.MAX_VALUE)
-                            .addComponent(jComboBoxKaryawan, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBoxKaryawan, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBoxPenjualan, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel4)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBoxKepuasan, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBoxPenjualan, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBoxPelayanan, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBoxAbsen, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBoxKedisiplinan, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBoxLamaKerja, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(407, Short.MAX_VALUE))
+                .addGap(0, 57, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,22 +195,25 @@ public class PrediksiView extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jComboBoxKaryawan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                    .addComponent(jComboBoxKaryawan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
                     .addComponent(jComboBoxKedisiplinan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
+                    .addComponent(jComboBoxLamaKerja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
                     .addComponent(jComboBoxPenjualan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jComboBoxKepuasan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jButton1)
+                    .addComponent(jComboBoxAbsen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jComboBoxPelayanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -185,7 +226,7 @@ public class PrediksiView extends javax.swing.JPanel {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 285, Short.MAX_VALUE)
+            .addGap(0, 282, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -212,20 +253,30 @@ public class PrediksiView extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         List<DataItem> trainingData = this.dataTrainingDao.findAsDataItem();
+        
+        String selectedName = (String) jComboBoxKaryawan.getSelectedItem();
+        Integer selectedId = karyawanMap.get(selectedName); // Mendapatkan ID berdasarkan nama
+        System.out.println("Karyawan ID : " + selectedId);
 
         String kedisiplinan = jComboBoxKedisiplinan.getSelectedItem().toString();
         String penjualan = jComboBoxPenjualan.getSelectedItem().toString();
-        String kepuasan = jComboBoxKepuasan.getSelectedItem().toString();
+        String absen = jComboBoxAbsen.getSelectedItem().toString();
+        String pelayanan = jComboBoxPelayanan.getSelectedItem().toString();
+        String lamaKerja = jComboBoxLamaKerja.getSelectedItem().toString();
 
         NaiveBayesAlgoritma nb = new NaiveBayesAlgoritma(trainingData);
 
         Map<String, String> sample = Map.of(
-            "Kedisiplinan", kedisiplinan,
             "Penjualan", penjualan,
-            "Kepuasan", kepuasan
+            "Absen", absen,
+            "Pelayanan", pelayanan,
+            "Kedisiplinan", kedisiplinan,
+            "Lama Kerja", lamaKerja
         );
 
-        String hasil = nb.predictWithExplanation(sample);
+        PredictionResultModel result = nb.predictWithExplanation(sample);
+        String hasil = result.getExplanation(); // untuk ditampilkan di JTextArea
+        String label = result.getLabel();       // untuk disimpan jika perlu
 
         // Buat teks area
         JTextArea txtHasil = new JTextArea();
@@ -246,20 +297,45 @@ public class PrediksiView extends javax.swing.JPanel {
 
         jPanel2.revalidate();
         jPanel2.repaint();
+        
+        // Insert hasil ke database
+        DataTrainingModel model = new DataTrainingModel();
+        model.setLadyYakultId(selectedId); // Ubah jika kamu ambil dari ComboBox
+        model.setKriteria1(penjualan);
+        model.setKriteria2(absen);
+        model.setKriteria3(pelayanan);
+        model.setKriteria4(kedisiplinan);
+        model.setKriteria5(lamaKerja);
+        model.setLabel(label);
+
+        int insertedId = dataTrainingDao.create(model);
+        System.out.println("Data training baru disimpan dengan ID: " + insertedId);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jComboBoxAbsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxAbsenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxAbsenActionPerformed
+
+    private void jComboBoxPelayananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxPelayananActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxPelayananActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBoxAbsen;
     private javax.swing.JComboBox<String> jComboBoxKaryawan;
     private javax.swing.JComboBox<String> jComboBoxKedisiplinan;
-    private javax.swing.JComboBox<String> jComboBoxKepuasan;
+    private javax.swing.JComboBox<String> jComboBoxLamaKerja;
+    private javax.swing.JComboBox<String> jComboBoxPelayanan;
     private javax.swing.JComboBox<String> jComboBoxPenjualan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables

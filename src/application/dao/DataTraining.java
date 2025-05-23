@@ -15,4 +15,5 @@ import java.util.List;
 public interface DataTraining {
      List<DataItem> findAsDataItem();
      List<DataTrainingModel> findAll();
+     int create(DataTrainingModel dataTraining);
 }
