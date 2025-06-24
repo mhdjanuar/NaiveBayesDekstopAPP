@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LaporanPrediksi" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="45d97650-9ee7-4237-baf6-d07ffeb001c5">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL"/>
+	<parameter name="PATH" class="java.lang.String"/>
+	<parameter name="NAMA" class="java.lang.String"/>
+	<parameter name="HASIL" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select * from  lady_yakult_nb.users limit 1]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id"/>
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="username" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="username"/>
+		<property name="com.jaspersoft.studio.field.label" value="username"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="email" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="email"/>
+		<property name="com.jaspersoft.studio.field.label" value="email"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="password" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="password"/>
+		<property name="com.jaspersoft.studio.field.label" value="password"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="fullname" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="fullname"/>
+		<property name="com.jaspersoft.studio.field.label" value="fullname"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="created_at" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="created_at"/>
+		<property name="com.jaspersoft.studio.field.label" value="created_at"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="updated_at" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="updated_at"/>
+		<property name="com.jaspersoft.studio.field.label" value="updated_at"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="80" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="842" height="100" forecolor="#FFFCFC" backcolor="#0D0C0C" uuid="1a031376-bcd6-445d-bfe3-6bb3aae9de63"/>
+				<staticText>
+					<reportElement x="266" y="10" width="350" height="30" forecolor="#FCFAFA" uuid="aa5322b8-92f4-4176-b813-9d181ed0a1b6"/>
+					<textElement textAlignment="Center">
+						<font fontName="Times New Roman" size="20" isBold="true"/>
+						<paragraph lineSpacingSize="1.0"/>
+					</textElement>
+					<text><![CDATA[PT YAKULT INDONESIA PERSADA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="340" y="40" width="221" height="20" forecolor="#FFFAFA" uuid="933551c7-7d31-4c52-8835-da9dba52cfd3"/>
+					<textElement>
+						<font fontName="Times New Roman"/>
+					</textElement>
+					<text><![CDATA[ Jl. Prof. DR. Soepomo No.143, RT.13/RW.2]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="360" y="60" width="170" height="20" forecolor="#FCFAFA" uuid="1af91703-99e5-4039-90bb-4f472852a754"/>
+					<text><![CDATA[Kec. Tebet, Kota Jakarta Selatan]]></text>
+				</staticText>
+				<image>
+					<reportElement x="40" y="25" width="100" height="100" uuid="23d5bb3f-e081-4190-9f1d-1a95495589ee"/>
+                                        <imageExpression><![CDATA[$P{PATH}+"logo_yakult-removebg-preview.png"]]></imageExpression>
+				</image>
+			</frame>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="197" splitType="Stretch">
+			<staticText>
+				<reportElement x="36" y="80" width="770" height="30" uuid="ee09b7cf-b431-4716-9fec-788beda8974b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="18"/>
+				</textElement>
+				<text><![CDATA[PT Yakult Indonesia Persada melalui hasil perhitungan metode Naive Bayes memprediksi bahwa]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="316" y="117" width="171" height="50" uuid="28402a60-7ef5-4e61-a9d8-d2dd5c01e589"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="22" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NAMA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="160" width="390" height="30" uuid="9c941ef7-b0d7-4cc4-a793-1869d448baf7"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{HASIL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="155" splitType="Stretch">
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="228" y="21" width="594" height="19" uuid="1a33f1d0-6783-4ab9-a928-25cb24df9325">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<paragraph rightIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Jakarta, " + new java.text.SimpleDateFormat("EEEE, dd MMMM yyyy", new java.util.Locale("id", "ID")).format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="230" y="51" width="588" height="19" uuid="386ba138-5671-4a1e-a07a-3d318d676179">
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+					<paragraph rightIndent="40"/>
+				</textElement>
+				<text><![CDATA[HRD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="226" y="131" width="567" height="24" uuid="a8012224-bf64-43a3-a1b8-330f96dabb27">
+					<property name="com.jaspersoft.studio.unit.spacingBefore" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<paragraph rightIndent="10"/>
+				</textElement>
+				<text><![CDATA[   Admin]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

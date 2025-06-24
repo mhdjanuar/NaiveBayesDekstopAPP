@@ -12,10 +12,13 @@ import application.models.DataTrainingModel;
 import application.models.KaryawanModel;
 import application.models.PredictionResultModel;
 import application.utils.DataItem;
+import application.utils.DatabaseUtil;
 import application.utils.NaiveBayesAlgoritma;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.io.InputStream;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,6 +29,13 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -35,6 +45,7 @@ public class PrediksiView extends javax.swing.JPanel {
     public final DataTraining dataTrainingDao;
     public final KaryawanDao karyawanDao;
     public Map<String, Integer> karyawanMap = new HashMap<>();
+    public String hasil;
     
     public void featureDropdown() {
         // Definisikan data fitur dan isinya
@@ -102,6 +113,7 @@ public class PrediksiView extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         jComboBoxLamaKerja = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -222,12 +234,19 @@ public class PrediksiView extends javax.swing.JPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 757, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 282, Short.MAX_VALUE)
+            .addGap(0, 293, Short.MAX_VALUE)
         );
+
+        jButton2.setText("CETAK LAPORAN PREDIKSI");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -237,7 +256,10 @@ public class PrediksiView extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton2)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -246,8 +268,9 @@ public class PrediksiView extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(12, 12, 12))
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -285,6 +308,8 @@ public class PrediksiView extends javax.swing.JPanel {
         txtHasil.setLineWrap(true);
         txtHasil.setWrapStyleWord(true);
         txtHasil.setText(hasil);
+        
+        this.hasil = label;
 
         // Bungkus dalam scroll pane
         JScrollPane scroll = new JScrollPane(txtHasil);
@@ -320,9 +345,44 @@ public class PrediksiView extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBoxPelayananActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+         try{
+            String templateName = "LaporanPrediksi.jrxml";
+            InputStream reportStream = MenuView.class.getResourceAsStream("/resources/reports/" + templateName);
+            JasperDesign jd = JRXmlLoader.load(reportStream);
+            
+            Connection dbConnection = DatabaseUtil.getInstance().getConnection();
+            JasperReport jr = JasperCompileManager.compileReport(jd);
+            
+            String selectedName = (String) jComboBoxKaryawan.getSelectedItem();
+            
+            String prediksi = "Belum Termasuk Sebagai Karyawan Terbaik";
+            
+            if(this.hasil.equals("Terbaik")) {
+                prediksi = "Merupakan Karyawan Terbaik";
+            }
+            
+            HashMap parameter = new HashMap();
+            parameter.put("PATH","resources/images/");
+            parameter.put("NAMA", selectedName.toUpperCase());
+            parameter.put("HASIL", prediksi);
+
+            JasperPrint jp = JasperFillManager.fillReport(jr,parameter, dbConnection);
+            
+            // Atur zoom 75% saat viewer dibuka
+            JasperViewer viewer = new JasperViewer(jp, false);
+            viewer.setZoomRatio(0.75f);
+            viewer.setVisible(true);
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBoxAbsen;
     private javax.swing.JComboBox<String> jComboBoxKaryawan;
     private javax.swing.JComboBox<String> jComboBoxKedisiplinan;
