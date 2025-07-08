@@ -50,11 +50,36 @@ public class PrediksiView extends javax.swing.JPanel {
     public void featureDropdown() {
         // Definisikan data fitur dan isinya
         Map<JComboBox<String>, List<String>> featureMap = new LinkedHashMap<>();
-        featureMap.put(jComboBoxPenjualan, Arrays.asList("Tinggi", "Sedang", "Rendah")); // volume penjualan
-        featureMap.put(jComboBoxAbsen, Arrays.asList("Jarang", "Sedang", "Sering"));     // frekuensi absen
-        featureMap.put(jComboBoxPelayanan, Arrays.asList("Sangat Baik", "Baik", "Buruk")); // kualitas pelayanan pelanggan
-        featureMap.put(jComboBoxKedisiplinan, Arrays.asList("Tepat Waktu", "Kadang Telat", "Sering Telat")); // disiplin kerja
-        featureMap.put(jComboBoxLamaKerja, Arrays.asList("Baru", "Menengah", "Lama"));    // lama pengalaman kerja
+        featureMap.put(jComboBoxPenjualan, Arrays.asList(
+            "Sangat baik (300-500 botol)",
+            "Baik (250-450 botol)",
+            "Cukup (200-400 botol)",
+            "Tidak baik (150-350 botol)"));
+
+        featureMap.put(jComboBoxAbsen, Arrays.asList(
+            "Sangat baik (0 hari absen)",
+            "Baik (1 hari absen)",
+            "Cukup (2-3 hari absen)",
+            "Tidak baik (4-7 hari absen)"));
+
+        featureMap.put(jComboBoxPelayanan, Arrays.asList(
+            "Sangat baik (responsif dan ramah)",
+            "Baik (cukup responsif)",
+            "Cukup (kadang lambat)",
+            "Tidak baik (banyak keluhan)"));
+
+        featureMap.put(jComboBoxKedisiplinan, Arrays.asList(
+            "Sangat baik (tepat waktu & patuh)",
+            "Baik (jarang terlambat)",
+            "Cukup (kadang melanggar)",
+            "Tidak baik (sering melanggar)"));
+
+        featureMap.put(jComboBoxLamaKerja, Arrays.asList(
+            "Sangat baik (>5 tahun)",
+            "Baik (3-5 tahun)",
+            "Cukup (1-2 tahun)",
+            "Tidak baik (<1 tahun)"));
+
 
         // Iterasi dan isi combo box secara dinamis
         for (Map.Entry<JComboBox<String>, List<String>> entry : featureMap.entrySet()) {
@@ -348,25 +373,16 @@ public class PrediksiView extends javax.swing.JPanel {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
          try{
-            String templateName = "LaporanPrediksi.jrxml";
+            String templateName = "LaporanPenilaianYakult.jrxml";
             InputStream reportStream = MenuView.class.getResourceAsStream("/resources/reports/" + templateName);
             JasperDesign jd = JRXmlLoader.load(reportStream);
             
             Connection dbConnection = DatabaseUtil.getInstance().getConnection();
             JasperReport jr = JasperCompileManager.compileReport(jd);
-            
-            String selectedName = (String) jComboBoxKaryawan.getSelectedItem();
-            
-            String prediksi = "Belum Termasuk Sebagai Karyawan Terbaik";
-            
-            if(this.hasil.equals("Terbaik")) {
-                prediksi = "Merupakan Karyawan Terbaik";
-            }
+           
             
             HashMap parameter = new HashMap();
             parameter.put("PATH","resources/images/");
-            parameter.put("NAMA", selectedName.toUpperCase());
-            parameter.put("HASIL", prediksi);
 
             JasperPrint jp = JasperFillManager.fillReport(jr,parameter, dbConnection);
             

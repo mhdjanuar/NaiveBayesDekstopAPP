@@ -16,6 +16,7 @@ public class KaryawanModel {
     private String email;
     private String gender;
     private String alamat;
+    private String nik;
     
 
     /**
@@ -114,5 +115,18 @@ public class KaryawanModel {
      */
     public void setName(String name) {
         this.name = name;
+    }
+     /**
+     * @return the nik
+     */
+    public String getNik() {
+        return nik;
+    }
+
+    /**
+     * @param nik the nik to set
+     */
+    public void setNik(String nik) {
+        this.nik = nik;
     }
 }

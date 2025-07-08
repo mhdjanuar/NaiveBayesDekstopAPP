@@ -47,6 +47,7 @@ public class KaryawanDaoImpl implements KaryawanDao {
                 listData.setKontak(resultSet.getString("telepon"));
                 listData.setEmail(resultSet.getString("email"));
                 listData.setAlamat(resultSet.getString("alamat"));
+                listData.setNik(resultSet.getString("nik"));
 
                 listDataAll.add(listData);
             }
@@ -63,13 +64,14 @@ public class KaryawanDaoImpl implements KaryawanDao {
     @Override
     public int create(KaryawanModel karyawan) {
         try {
-            query = "INSERT INTO lady_yakult(nama, umur, alamat, telepon, email) VALUES (?, ?, ?, ?, ?)";
+            query = "INSERT INTO lady_yakult(nama, umur, alamat, telepon, email, nik) VALUES (?, ?, ?, ?, ?, ?)";
             pstmt = dbConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, karyawan.getName());
             pstmt.setInt(2, karyawan.getUsia());
             pstmt.setString(3, karyawan.getAlamat());
             pstmt.setString(4, karyawan.getKontak());
             pstmt.setString(5, karyawan.getEmail());
+            pstmt.setString(6, karyawan.getNik());
 
             // Log sebelum insert
             System.out.println("=== Menyimpan Data Karyawan ===");
@@ -119,7 +121,7 @@ public class KaryawanDaoImpl implements KaryawanDao {
         int result = 0;
         try {
             // Query untuk mengupdate data karyawan
-            query = "UPDATE lady_yakult SET nama = ?, umur = ?, telepon = ?, email = ?, alamat = ? WHERE id = ?";
+            query = "UPDATE lady_yakult SET nama = ?, umur = ?, telepon = ?, email = ?, alamat = ?, nik = ? WHERE id = ?";
 
             pstmt = dbConnection.prepareStatement(query);
             pstmt.setString(1, karyawan.getName());  // Nama karyawan
@@ -127,7 +129,8 @@ public class KaryawanDaoImpl implements KaryawanDao {
             pstmt.setString(3, karyawan.getKontak());  // Kontak karyawan
             pstmt.setString(4, karyawan.getEmail());  // Email karyawan
             pstmt.setString(5, karyawan.getAlamat());  // Alamat karyawan
-            pstmt.setInt(6, karyawan.getId());  // ID karyawan yang akan diupdate
+            pstmt.setString(6, karyawan.getNik());  // Alamat karyawan
+            pstmt.setInt(7, karyawan.getId());  // ID karyawan yang akan diupdate
 
             result = pstmt.executeUpdate();  // Eksekusi query update
         } catch (SQLException e) {
