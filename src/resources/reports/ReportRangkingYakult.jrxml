@@ -37,23 +37,48 @@
 			<![CDATA[SELECT 
     nama,
     avg_total_score,
-     CAST(@rank := @rank + 1 AS UNSIGNED) AS peringkat
+    CAST(@rank := @rank + 1 AS UNSIGNED) AS peringkat
 FROM (
     SELECT 
         ly.nama, 
         ROUND(
             AVG(
-                0.2 * CASE dt.kriteria1 WHEN 'Tinggi' THEN 3 WHEN 'Sedang' THEN 2 WHEN 'Rendah' THEN 1 END +
-                0.2 * CASE dt.kriteria2 WHEN 'Tinggi' THEN 3 WHEN 'Sedang' THEN 2 WHEN 'Rendah' THEN 1 WHEN 'Jarang' THEN 1 END +
-                0.2 * CASE dt.kriteria3 WHEN 'Sangat Baik' THEN 4 WHEN 'Baik' THEN 3 WHEN 'Buruk' THEN 2 WHEN 'Sangat Buruk' THEN 1 END +
-                0.2 * CASE dt.kriteria4 WHEN 'Tepat Waktu' THEN 3 WHEN 'Kadang Telat' THEN 2 WHEN 'Sering Telat' THEN 1 END +
-                0.2 * CASE dt.kriteria5 WHEN 'Lama' THEN 3 WHEN 'Menengah' THEN 2 WHEN 'Baru' THEN 1 END
-            ),
-        1) AS avg_total_score
+                0.2 * CASE 
+                        WHEN dt.kriteria1 LIKE 'Sangat baik%' THEN 4
+                        WHEN dt.kriteria1 LIKE 'Baik%' THEN 3
+                        WHEN dt.kriteria1 LIKE 'Cukup%' THEN 2
+                        WHEN dt.kriteria1 LIKE 'Tidak baik%' THEN 1
+                    END +
+                0.2 * CASE 
+                        WHEN dt.kriteria2 LIKE 'Sangat baik%' THEN 4
+                        WHEN dt.kriteria2 LIKE 'Baik%' THEN 3
+                        WHEN dt.kriteria2 LIKE 'Cukup%' THEN 2
+                        WHEN dt.kriteria2 LIKE 'Tidak baik%' THEN 1
+                    END +
+                0.2 * CASE 
+                        WHEN dt.kriteria3 LIKE 'Sangat baik%' THEN 4
+                        WHEN dt.kriteria3 LIKE 'Baik%' THEN 3
+                        WHEN dt.kriteria3 LIKE 'Cukup%' THEN 2
+                        WHEN dt.kriteria3 LIKE 'Tidak baik%' THEN 1
+                    END +
+                0.2 * CASE 
+                        WHEN dt.kriteria4 LIKE 'Sangat baik%' THEN 4
+                        WHEN dt.kriteria4 LIKE 'Baik%' THEN 3
+                        WHEN dt.kriteria4 LIKE 'Cukup%' THEN 2
+                        WHEN dt.kriteria4 LIKE 'Tidak baik%' THEN 1
+                    END +
+                0.2 * CASE 
+                        WHEN dt.kriteria5 LIKE 'Sangat baik%' THEN 4
+                        WHEN dt.kriteria5 LIKE 'Baik%' THEN 3
+                        WHEN dt.kriteria5 LIKE 'Cukup%' THEN 2
+                        WHEN dt.kriteria5 LIKE 'Tidak baik%' THEN 1
+                    END
+            ), 1
+        ) AS avg_total_score
     FROM 
         lady_yakult_nb.data_training dt
     INNER JOIN 
-         lady_yakult_nb.lady_yakult  ly ON ly.id = dt.lady_yakult_id
+        lady_yakult_nb.lady_yakult ly ON ly.id = dt.lady_yakult_id
     GROUP BY 
         ly.id, ly.nama
     ORDER BY 
@@ -155,7 +180,7 @@ JOIN (SELECT @rank := 0) AS r;
 				<textElement textAlignment="Center">
 					<font size="20" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Laporan Ranking]]></text>
+				<text><![CDATA[Lady Yakult Terbaik]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -253,7 +278,7 @@ JOIN (SELECT @rank := 0) AS r;
 	<pageFooter>
 		<band height="154" splitType="Stretch">
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="-20" y="20" width="594" height="19" uuid="d093389b-7d63-4f53-bdf0-0c0e770f3685">
+				<reportElement x="-20" y="20" width="594" height="19" uuid="1c64b46e-3354-4429-98ab-73a88b06c2a5">
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right">
@@ -262,7 +287,7 @@ JOIN (SELECT @rank := 0) AS r;
 				<textFieldExpression><![CDATA["Jakarta, " + new java.text.SimpleDateFormat("EEEE, dd MMMM yyyy", new java.util.Locale("id", "ID")).format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="-18" y="50" width="588" height="19" uuid="eb053141-2c5a-4e41-b523-b11ceb30ca0c">
+				<reportElement x="-18" y="50" width="588" height="19" uuid="cfabdc15-03d7-487e-95b8-979d0b90b162">
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right">
@@ -272,14 +297,14 @@ JOIN (SELECT @rank := 0) AS r;
 				<text><![CDATA[HRD]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="-22" y="130" width="567" height="24" uuid="7b3a50c5-ab6f-4010-85c5-3ac5420a2221">
+				<reportElement x="-17" y="130" width="577" height="24" uuid="8a8c4422-9bde-4709-81b6-ca3d6d83cade">
 					<property name="com.jaspersoft.studio.unit.spacingBefore" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right">
 					<paragraph rightIndent="10"/>
 				</textElement>
-				<text><![CDATA[   Admin]]></text>
+				<text><![CDATA[Arya Anindita]]></text>
 			</staticText>
 		</band>
 	</pageFooter>

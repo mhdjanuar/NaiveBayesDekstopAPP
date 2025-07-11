@@ -103,9 +103,9 @@
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="155" splitType="Stretch">
+		<band height="154" splitType="Stretch">
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="228" y="21" width="594" height="19" uuid="1a33f1d0-6783-4ab9-a928-25cb24df9325">
+				<reportElement x="-20" y="20" width="594" height="19" uuid="1c64b46e-3354-4429-98ab-73a88b06c2a5">
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right">
@@ -114,7 +114,7 @@
 				<textFieldExpression><![CDATA["Jakarta, " + new java.text.SimpleDateFormat("EEEE, dd MMMM yyyy", new java.util.Locale("id", "ID")).format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="230" y="51" width="588" height="19" uuid="386ba138-5671-4a1e-a07a-3d318d676179">
+				<reportElement x="-18" y="50" width="588" height="19" uuid="cfabdc15-03d7-487e-95b8-979d0b90b162">
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right">
@@ -124,14 +124,14 @@
 				<text><![CDATA[HRD]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="226" y="131" width="567" height="24" uuid="a8012224-bf64-43a3-a1b8-330f96dabb27">
+				<reportElement x="-17" y="130" width="577" height="24" uuid="8a8c4422-9bde-4709-81b6-ca3d6d83cade">
 					<property name="com.jaspersoft.studio.unit.spacingBefore" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right">
 					<paragraph rightIndent="10"/>
 				</textElement>
-				<text><![CDATA[   Admin]]></text>
+				<text><![CDATA[Arya Anindita]]></text>
 			</staticText>
 		</band>
 	</pageFooter>
