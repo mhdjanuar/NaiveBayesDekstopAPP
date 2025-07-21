@@ -51,10 +51,10 @@ public class PrediksiView extends javax.swing.JPanel {
         // Definisikan data fitur dan isinya
         Map<JComboBox<String>, List<String>> featureMap = new LinkedHashMap<>();
         featureMap.put(jComboBoxPenjualan, Arrays.asList(
-            "Sangat baik (300-500 botol)",
-            "Baik (250-450 botol)",
-            "Cukup (200-400 botol)",
-            "Tidak baik (150-350 botol)"));
+            "Sangat baik (350-500 botol)",
+            "Baik (250-349 botol)",
+            "Cukup (200-249 botol)",
+            "Tidak baik (150-199 botol)"));
 
         featureMap.put(jComboBoxAbsen, Arrays.asList(
             "Sangat baik (0 hari absen)",
