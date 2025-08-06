@@ -76,9 +76,15 @@ import net.sf.jasperreports.view.JasperViewer;
                     karyawan.getAlamat(),
                 });
             }
+           
 
             // Set model ke JTable
             jTable1.setModel(model);
+            
+                        // Sembunyikan kolom pertama (ID)
+            jTable1.getColumnModel().getColumn(0).setMinWidth(0);
+            jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
+            jTable1.getColumnModel().getColumn(0).setWidth(0);
         }
 
     
